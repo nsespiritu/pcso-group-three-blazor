@@ -1,0 +1,102 @@
+﻿@page "/crudmobileorganizationsrepository"
+@using pcso_group_three_blazor.Data;
+@inject pcso_group_three_blazor.IRepository.IMobileOrganizationsRepository mobileRepository;
+
+
+<h3>PCSO Mobile Organizations Guide</h3>
+<input type="text" @bind-value="@mobileOrganizations.DepartmentName" />
+<br />
+
+<input type="text" @bind-value="@mobileOrganizations.EmployeeName" />
+<br />
+
+<input type="text" @bind-value="@mobileOrganizations.EmployeePosition" />
+<br />
+
+<input type="image" @bind-value="@mobileOrganizations.EmployeePicture" />
+<br />
+
+<input type="text" @bind-value="@mobileOrganizations.EmployeePictureURL" />
+<br />
+
+ <button class="btn btn-success" @onclick="@(e=>SaveItem())" >Save</button>
+
+
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>Mobile Organizations ID</th>
+            <th>Department Name</th>
+            <th>Employee Name</th>
+            <th>Employee Position</th>
+            <th>Employee Picture</th>
+            <th>Employee Picture URL</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in mobileOrganizationsList)
+        {
+            <tr>
+                <td>@item.MobileOrganizationsID</td>
+                <td>@item.DepartmentName</td>
+                <td>@item.EmployeeName</td>
+                <td>@item.EmployeePosition</td>
+                <td>@item.EmployeePicture</td>
+                <td>@item.EmployeePictureURL</td>
+                <td>
+                    <button class="btn btn-outline-primary" @onclick="@(e=>SetItemValue(@item))">Edit</button>
+                    <button class="btn btn-outline-danger" @onclick="@(e=>DeleteItem(@item.MobileOrganizationsID))">Delete</button>
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@code {
+
+    // declare local variables
+
+    MobileOrganizations mobileOrganizations = new MobileOrganizations();
+    List<MobileOrganizations> mobileOrganizationsList = new List<MobileOrganizations>();
+
+
+    // get list of mobile organizations
+    private void LoadItems(){
+        mobileOrganizationsList = new List<MobileOrganizations>();
+        mobileOrganizationsList = mobileRepository.Gets();
+    }
+
+
+    // get mobile organization item
+    private void GetItem(int mobileOrganizationsID){
+        mobileOrganizations = mobileRepository.Get(mobileOrganizationsID);
+    }
+
+
+    // delete mobile organization item
+    private void DeleteItem(int mobileOrganizationsID){
+        string message = mobileRepository.Delete(mobileOrganizationsID);
+    }
+
+    private void SaveItem(){
+        if (mobileOrganizations.MobileOrganizationsID == 0)
+        {
+            mobileOrganizations = mobileRepository.Save(mobileOrganizations);
+        }
+        else
+        {
+            mobileOrganizations = mobileRepository.Update(mobileOrganizations);
+        }
+
+        LoadItems();
+    }
+
+
+    private void SetItemValue(MobileOrganizations _mobileOrganizations)
+    {
+        mobileOrganizations = _mobileOrganizations;
+    }
+
+}

@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.EntityFrameworkCore;
 using pcso_group_three_blazor.Data;
 using pcso_group_three_blazor.DBContext;
+using pcso_group_three_blazor.IRepository;
+using pcso_group_three_blazor.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +15,9 @@ builder.Services.AddSingleton<WeatherForecastService>();
 
 // get the connection string from the appsettings.json
 builder.Services.AddDbContext<ContextDB>(o => o.UseSqlServer(builder.Configuration.GetConnectionString("GROUP3")));
+
+
+builder.Services.AddScoped<IMobileOrganizationsRepository, MobileOrganizationsRepository>();
 
 var app = builder.Build();
 

@@ -4,14 +4,14 @@
 	{
 		public int MobileOrganizationsID { get; set; } = 0;
 
-		public string DepartmentName { get; set; } = "";
+		public string? DepartmentName { get; set; } = "";
 
-		public string EmployeeName { get; set; } = "";
+		public string? EmployeeName { get; set; } = "";
 
-		public string EmployeePosition { get; set; } = "";
+		public string? EmployeePosition { get; set; } = "";
 
 		public byte[]? EmployeePicture { get; set; } = null;
 
-		public string EmployeePictureURL { get; set; } = "";
+		public string? EmployeePictureURL { get; set; } = "";
 	}
 }

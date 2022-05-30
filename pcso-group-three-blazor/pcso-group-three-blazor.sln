@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32519.111
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pcso-group-three-blazor", "pcso-group-three-blazor.csproj", "{868CE2D5-8F69-4967-BEFE-1886B7FAE02A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pcso-group-three-blazor", "pcso-group-three-blazor.csproj", "{868CE2D5-8F69-4967-BEFE-1886B7FAE02A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
