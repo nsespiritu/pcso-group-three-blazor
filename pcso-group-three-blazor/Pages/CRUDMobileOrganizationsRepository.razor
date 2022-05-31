@@ -4,24 +4,36 @@
 
 
 <h3>PCSO Mobile Organizations Guide</h3>
+<label for="DepartmentName">Department Name</label>
 <input type="text" @bind-value="@mobileOrganizations.DepartmentName" />
 <br />
 
+<label for="EmployeeName">Employee Name</label>
 <input type="text" @bind-value="@mobileOrganizations.EmployeeName" />
 <br />
 
+<label for="EmployeePosition">Employee Position</label>
 <input type="text" @bind-value="@mobileOrganizations.EmployeePosition" />
 <br />
 
-<input type="image" @bind-value="@mobileOrganizations.EmployeePicture" />
+<label for="EmployeeInformation">Employee Information</label>
+<input type="text" @bind-value="@mobileOrganizations.EmployeeInformation" />
 <br />
 
+<label for="EmployeePictureURL">Employee Picture URL</label>
 <input type="text" @bind-value="@mobileOrganizations.EmployeePictureURL" />
 <br />
 
  <button class="btn btn-success" @onclick="@(e=>SaveItem())" >Save</button>
+  <button class="btn btn-outline-primary" @onclick="@(e=>ClearFields())" >Clear Fields</button>
 
 
+@if (mobileOrganizationsList == null)
+{
+     <p><em>No data...</em></p>
+}
+else
+{
 <table class="table table-striped table-bordered">
     <thead>
         <tr>
@@ -29,8 +41,9 @@
             <th>Department Name</th>
             <th>Employee Name</th>
             <th>Employee Position</th>
-            <th>Employee Picture</th>
+            <th>Employee Information</th>
             <th>Employee Picture URL</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -41,7 +54,7 @@
                 <td>@item.DepartmentName</td>
                 <td>@item.EmployeeName</td>
                 <td>@item.EmployeePosition</td>
-                <td>@item.EmployeePicture</td>
+                <td>@item.EmployeeInformation</td>
                 <td>@item.EmployeePictureURL</td>
                 <td>
                     <button class="btn btn-outline-primary" @onclick="@(e=>SetItemValue(@item))">Edit</button>
@@ -52,6 +65,7 @@
         }
     </tbody>
 </table>
+}
 
 
 @code {
@@ -59,8 +73,9 @@
     // declare local variables
 
     MobileOrganizations mobileOrganizations = new MobileOrganizations();
-    List<MobileOrganizations> mobileOrganizationsList = new List<MobileOrganizations>();
+    List<MobileOrganizations>? mobileOrganizationsList;
 
+    protected override async Task OnInitializedAsync() => mobileOrganizationsList = mobileRepository.Gets();
 
     // get list of mobile organizations
     private void LoadItems(){
@@ -78,6 +93,7 @@
     // delete mobile organization item
     private void DeleteItem(int mobileOrganizationsID){
         string message = mobileRepository.Delete(mobileOrganizationsID);
+        LoadItems();
     }
 
     private void SaveItem(){
@@ -97,6 +113,15 @@
     private void SetItemValue(MobileOrganizations _mobileOrganizations)
     {
         mobileOrganizations = _mobileOrganizations;
+    }
+
+    private void ClearFields()
+    {
+        mobileOrganizations.DepartmentName = string.Empty;
+        mobileOrganizations.EmployeeInformation = string.Empty;
+        mobileOrganizations.EmployeeName = string.Empty;
+        mobileOrganizations.EmployeePosition = string.Empty;
+        mobileOrganizations.EmployeePictureURL = string.Empty;
     }
 
 }

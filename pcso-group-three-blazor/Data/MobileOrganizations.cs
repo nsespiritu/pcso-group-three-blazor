@@ -1,4 +1,6 @@
-﻿namespace pcso_group_three_blazor.Data
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace pcso_group_three_blazor.Data
 {
 	public class MobileOrganizations
 	{
@@ -10,7 +12,9 @@
 
 		public string? EmployeePosition { get; set; } = "";
 
-		public byte[]? EmployeePicture { get; set; } = null;
+		public string? EmployeeInformation { get; set; } = "";
+
+        //public byte[]? EmployeePicture { get; set; } = null;
 
 		public string? EmployeePictureURL { get; set; } = "";
 	}
