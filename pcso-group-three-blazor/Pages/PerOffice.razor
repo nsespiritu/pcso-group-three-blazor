@@ -26,20 +26,20 @@
 else
 @foreach (var item in _officerList)
 {
-    <img src="@item.imageURL">
+   <img src="@item.imageURL" @onclick="@(e=>PerPerson(@item.id.ToString()))">
     <br />
     <label for="EmployeeName">@item.name</label>
     <br />
     <label for="EmployeePosition">@item.position</label>
     <br />
     <br />
-    <label for="EmployeeInformation">@item.description</label>    
-    <br />
+@*    <label for="EmployeeInformation">@item.description</label>    
+    <br />*@
 }
 
  <button class="btn btn-outline-primary" @onclick="@(e=>Back())" >Back</button>
 
-<h3>PerOffice</h3>
+@*<h3>PerOffice</h3>*@
 
 @code {
 
@@ -100,7 +100,13 @@ else
 
     private void Back()
     {
-        UriHelper.NavigateTo("/mainpageeroffice");
+        UriHelper.NavigateTo("/directorypage");
+    }
+
+
+    private void PerPerson(string PersonID = "")
+    {
+        UriHelper.NavigateTo("/PerOfficer/" + PersonID);
     }
 
 

@@ -1,0 +1,70 @@
+﻿@page "/PerOfficer/{PersonID?}"
+@using System.Text.Json
+@using pcso_group_three_blazor.Data
+@inject NavigationManager UriHelper;
+
+
+@*<h3>PerOfficer</h3>*@
+
+
+ @if (_officer == null)
+{
+    <p><em>Loading... version 1.0</em></p>
+}
+else {
+
+    <img src="@_officer.imageURL" width="400" height="400">
+    <br />
+    <label for="EmployeeName">@_officer.name</label>
+    <br />
+    <label for="EmployeePosition">@_officer.position</label>
+    <br />
+    <br />
+    <label for="EmployeeInformation">@_officer.description</label>    
+    <br />
+    <br />
+
+     <button class="btn btn-outline-primary" @onclick="@(e=>Back())" >Back</button>
+
+}
+
+@code {
+   [Parameter]
+    public string? PersonID { get; set; }
+
+
+    private int count = 0;
+    private string jasonData = string.Empty;
+    //private List<Officer>? _officerList = null;
+    HttpClient hc = null;
+    private Officer _officer = null;
+
+
+    protected async override Task OnInitializedAsync()
+    {
+        await GetByID();
+        //base.OnInitializedAsync();
+    }
+
+
+
+    private async Task GetByID()
+    {
+        hc = new HttpClient();
+
+        // get all the records
+        jasonData = await hc.GetStringAsync("https://pcso-group3-backend.azurewebsites.net/officers/" + Convert.ToInt32(PersonID));
+
+
+        // serialized data        
+        _officer = JsonSerializer.Deserialize<Officer>(jasonData);
+    }
+
+
+    private void Back()
+    {
+        UriHelper.NavigateTo("/directorypage");
+    }
+
+
+}

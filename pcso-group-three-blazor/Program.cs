@@ -16,9 +16,9 @@ builder.Services.AddSingleton<WeatherForecastService>();
 
 // get the connection string from the appsettings.json
 //builder.Services.AddDbContext<ContextDB>(o => o.UseSqlServer(builder.Configuration.GetConnectionString("GROUP3")));
-builder.Services.AddDbContext<MobileOrganizationsContext>(o => o.UseSqlServer(builder.Configuration.GetConnectionString("GROUP3")));
+//builder.Services.AddDbContext<MobileOrganizationsContext>(o => o.UseSqlServer(builder.Configuration.GetConnectionString("GROUP3")));
 
-builder.Services.AddScoped<IMobileOrganizationsRepository, MobileOrganizationsRepository>();
+//builder.Services.AddScoped<IMobileOrganizationsRepository, MobileOrganizationsRepository>();
 
 
 var app = builder.Build();
