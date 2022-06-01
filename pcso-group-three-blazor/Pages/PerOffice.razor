@@ -1,0 +1,107 @@
+﻿@page "/peroffice/{OfficeID?}"
+@*@page "/peroffice/{OfficeID?}"*@
+@using System.Text.Json
+@using pcso_group_three_blazor.Data;
+@*@inject pcso_group_three_blazor.IRepository.IMobileOrganizationsRepository mobileRepository;*@
+@inject NavigationManager UriHelper;
+
+
+@*@foreach (var item in mobileOrganizationsList)
+{
+    <img src="@item.EmployeePictureURL">
+    <br />
+    <label for="EmployeeName">@item.EmployeeName</label>
+    <br />
+    <label for="EmployeePosition">@item.EmployeePosition</label>
+    <br />
+    <br />
+    <label for="EmployeeInformation">@item.EmployeeInformation</label>    
+    <br />
+}*@
+
+@if (_officerList == null)
+{
+    <p><em>Loading... version 1.0</em></p>
+}
+else
+@foreach (var item in _officerList)
+{
+    <img src="@item.imageURL">
+    <br />
+    <label for="EmployeeName">@item.name</label>
+    <br />
+    <label for="EmployeePosition">@item.position</label>
+    <br />
+    <br />
+    <label for="EmployeeInformation">@item.description</label>    
+    <br />
+}
+
+ <button class="btn btn-outline-primary" @onclick="@(e=>Back())" >Back</button>
+
+<h3>PerOffice</h3>
+
+@code {
+
+    // declare local variables
+    //MobileOrganizations mobileOrganizations = new MobileOrganizations();
+    //List<MobileOrganizations>? mobileOrganizationsList;
+
+    private int count = 0;
+    private string jasonData = string.Empty;
+    private List<Officer>? _officerList = null;
+    HttpClient hc = null;
+    private Officer _officer = null;
+
+
+
+    [Parameter]
+    public string? OfficeID { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        await GetListAsync();
+        //base.OnInitializedAsync();
+    }
+
+
+
+    //protected override async Task OnInitializedAsync() => mobileOrganizationsList = mobileRepository.Gets().Where(s => s.DepartmentName == paramDepartnmentName).ToList();
+
+
+    // get list of mobile organizations
+    //private void LoadItems(){
+    //    mobileOrganizationsList = new List<MobileOrganizations>();
+    //    mobileOrganizationsList = mobileRepository.Gets().Where(s => s.DepartmentName == paramDepartnmentName).ToList();
+
+    //}
+
+    private async Task GetListAsync()
+    {
+        hc = new HttpClient();
+
+        // get all the records
+        jasonData = await hc.GetStringAsync("https://pcso-group3-backend.azurewebsites.net/officers");
+        //jasonData = await hc.GetStringAsync("https://localhost:7019/officers");
+
+        // serialized data
+        //_officerList = new List<Officer>();
+
+        _officerList = JsonSerializer.Deserialize<List<Officer>>(jasonData);
+
+        int newOfficeID = Convert.ToInt32(OfficeID);
+
+        _officerList = _officerList.Where(s => s.officeId == newOfficeID).ToList();
+
+        // instantiate the object
+        _officer = new Officer();
+
+    }
+
+    private void Back()
+    {
+        UriHelper.NavigateTo("/mainpageeroffice");
+    }
+
+
+}

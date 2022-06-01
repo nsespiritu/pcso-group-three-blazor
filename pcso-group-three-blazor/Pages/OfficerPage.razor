@@ -1,0 +1,196 @@
+﻿@page "/officerpage"
+@inject IJSRuntime JS
+@using System.Text.Json;
+@using System.Text.Json.Serialization;
+@using System.Net.Http.Headers;
+
+@using pcso_group_three_blazor.Data;
+
+
+<h3>Officer Page</h3>
+
+@if (_officerList == null)
+{
+    <p><em>Loading... version 1.0</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Position</th>
+                <th>Department</th>
+                <th>Image URL</th>
+                <th>Position</th>
+                <th>Office ID</th>
+                <th>Action</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var todoitem in _officerList)
+            {
+                <tr>
+                    <td>@todoitem.id</td>
+                    <td>@todoitem.name</td>
+                    <td>@todoitem.position</td>
+                    <td>@todoitem.department</td>
+                    <td>@todoitem.imageURL</td>
+                    <td>@todoitem.position</td>
+                    <td>@todoitem.officeId</td>
+                     <td>
+                    <button class="btn btn-outline-primary" @onclick="@(e=>SetItemValue(@todoitem.id))">Edit</button>
+                    <button class="btn btn-outline-danger" @onclick="@(e=>DeleteItem(@todoitem.id))">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+
+    <br />
+    <input @bind="_officer.id" placeholder="Name" readonly/>
+    <input @bind="_officer.name" placeholder="Name"/>
+    <input @bind="_officer.position" placeholder="Position"/>
+    <input @bind="_officer.department" placeholder="Department"/>
+    <input @bind="_officer.imageURL" placeholder="Image URL"/>
+    <input @bind="_officer.officeId" placeholder="Office ID"/>
+
+    <br />
+     <button class="btn btn-primary" @onclick="AddOfficer">Add Officer</button>
+     <button class="btn btn-primary" @onclick="@(e=>UpdateItem(@_officer))">Update</button>
+
+
+}
+
+
+
+
+@code {
+    private int count = 0;
+    private string jasonData = string.Empty;
+    private List<Officer>? _officerList = null;
+    HttpClient hc = null;
+    private Officer _officer = null;
+
+    private async Task SetItemValue(int ID)
+    {
+        await GetByID(ID);
+    }
+
+
+    private async Task UpdateItem(Officer _officer)
+    {
+
+        hc = new HttpClient();
+
+        //Officer officerPut = new Officer
+        //    {
+        //       name = _officer.name,
+        //       position = _officer.position,
+        //       department = _officer.department,
+        //       imageURL = _officer.imageURL,
+        //       officeId = _officer.officeId
+        //    };
+
+        //string myContent = JsonSerializer.Serialize(_officer);
+        //byte[] buffer = System.Text.Encoding.UTF8.GetBytes(myContent);
+        //ByteArrayContent byteContent = new ByteArrayContent(buffer);
+
+        //byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+        ////string urlName = "https://pcso-group3-backend.azurewebsites.net/officers/"+ ID;
+
+        // await hc.PutAsync("https://pcso-group3-backend.azurewebsites.net/officers/{ID}", byteContent);
+
+        await hc.PutAsJsonAsync("https://pcso-group3-backend.azurewebsites.net/officers/" + _officer.id, _officer);
+
+        await GetListAsync();
+    }
+
+    // delete mobile organization item
+    private async Task DeleteItem(int ID){
+        hc = new HttpClient();
+
+        // delete the item from the stream
+        await hc.DeleteAsync("https://pcso-group3-backend.azurewebsites.net/officers/" + ID);
+
+        // get the updated list
+        await GetListAsync();
+
+    }
+
+
+
+    protected async override Task OnInitializedAsync()
+    {
+        await GetListAsync();
+        base.OnInitializedAsync();
+    }
+
+
+    private async Task GetListAsync()
+    {
+        hc = new HttpClient();
+
+        // get all the records
+        jasonData = await hc.GetStringAsync("https://pcso-group3-backend.azurewebsites.net/officers");
+        //jasonData = await hc.GetStringAsync("https://localhost:7019/officers");
+
+        // serialized data
+        //_officerList = new List<Officer>();
+
+        _officerList = JsonSerializer.Deserialize<List<Officer>>(jasonData);
+
+        // instantiate the object
+        _officer = new Officer();
+
+    }
+
+    private async Task GetByID(int ID)
+    {
+        hc = new HttpClient();
+
+        // get all the records
+        jasonData = await hc.GetStringAsync("https://pcso-group3-backend.azurewebsites.net/officers/" + ID);
+
+
+        // serialized data        
+        _officer = JsonSerializer.Deserialize<Officer>(jasonData);
+
+    }
+
+
+
+     private async void AddOfficer()
+    {
+        //count++;
+
+        hc = new HttpClient();
+
+        Officer officerPost = new Officer
+            {
+               name = _officer.name,
+               position = _officer.position,
+               department = _officer.department,
+               imageURL = _officer.imageURL,
+               officeId = _officer.officeId
+            };
+
+        string myContent = JsonSerializer.Serialize(officerPost);
+        byte[] buffer = System.Text.Encoding.UTF8.GetBytes(myContent);
+        ByteArrayContent byteContent = new ByteArrayContent(buffer);
+
+        byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+        await hc.PostAsync("https://pcso-group3-backend.azurewebsites.net/officers", byteContent);
+
+       
+        await GetListAsync();
+        StateHasChanged();
+                        
+    }
+
+
+}

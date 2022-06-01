@@ -1,0 +1,26 @@
+﻿@page "/mainpageeroffice"
+@using pcso_group_three_blazor.Data;
+@inject pcso_group_three_blazor.IRepository.IMobileOrganizationsRepository mobileRepository;
+@inject NavigationManager UriHelper;
+
+<h3>MainPagePerOffice</h3>
+
+
+
+
+ <button class="btn btn-outline-primary" @onclick="@(e=>DisplayBoardOfDirectors("Office of the Board of Directors"))" >Office of the Directors</button>
+ <button class="btn btn-outline-primary" @onclick="@(e=>DisplayBoardOfDirectors("Office of the Chairperson"))">Office of the Chairperson</button>
+ <button class="btn btn-outline-primary" @onclick="@(e=>DisplayBoardOfDirectors("Office of the Board Secretary"))">Office of the Board Secretary</button>
+ <button class="btn btn-outline-primary" @onclick="@(e=>DisplayBoardOfDirectors("Office of the General Manager"))">Office of the General Manager</button>
+ <button class="btn btn-outline-primary" @onclick="@(e=>DisplayBoardOfDirectors("Administrative Sector"))">Administrative Sector</button>
+ <button class="btn btn-outline-primary" @onclick="@(e=>DisplayBoardOfDirectors("Branch Operation Sector"))">Branch Operation Sector</button>
+ <button class="btn btn-outline-primary" @onclick="@(e=>DisplayBoardOfDirectors("Charity Sector"))">Charity Sector</button>
+ <button class="btn btn-outline-primary" @onclick="@(e=>DisplayBoardOfDirectors("Gaming, Product Development and Marketing Sector"))" >Gaming, Product Development and Marketing Sector</button>
+ <button class="btn btn-outline-primary" @onclick="@(e=>DisplayBoardOfDirectors("Management Services Sector"))">Management Services Sector</button>
+
+@code {
+    private void DisplayBoardOfDirectors(string Department = "")
+    {
+        UriHelper.NavigateTo("/peroffice/" + Department);
+    }
+}

@@ -1,0 +1,22 @@
+﻿@page "/directorypage"
+@inject NavigationManager UriHelper;
+
+<h3>DirectoryPage</h3>
+ 
+<button class="btn btn-outline-primary" width="150" @onclick="@(e=>DisplayBoardOfDirectors("1"))" >Office of the Directors</button>
+ <button class="btn btn-outline-primary" @onclick="@(e=>DisplayBoardOfDirectors("2"))">Office of the Chairperson</button>
+ <button class="btn btn-outline-primary" @onclick="@(e=>DisplayBoardOfDirectors("3"))">Office of the Board Secretary</button>
+ <button class="btn btn-outline-primary" @onclick="@(e=>DisplayBoardOfDirectors("4"))">Office of the General Manager</button>
+ <button class="btn btn-outline-primary" @onclick="@(e=>DisplayBoardOfDirectors("5"))">Administrative Sector</button>
+ <button class="btn btn-outline-primary" @onclick="@(e=>DisplayBoardOfDirectors("6"))">Branch Operation Sector</button>
+ <button class="btn btn-outline-primary" @onclick="@(e=>DisplayBoardOfDirectors("7"))">Charity Sector</button>
+ <button class="btn btn-outline-primary" @onclick="@(e=>DisplayBoardOfDirectors("8"))" >Gaming, Product Development and Marketing Sector</button>
+ <button class="btn btn-outline-primary" @onclick="@(e=>DisplayBoardOfDirectors("9"))">Management Services Sector</button>
+
+
+@code {
+    private void DisplayBoardOfDirectors(string OfficeID = "1")
+    {
+        UriHelper.NavigateTo("/peroffice/" + OfficeID);
+    }
+}
