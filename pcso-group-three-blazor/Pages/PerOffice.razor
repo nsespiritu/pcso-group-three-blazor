@@ -87,7 +87,8 @@ else
         // FROM DATABASE
        int newOfficeID = Convert.ToInt32(OfficeID);
 
-        jasonData = await hc.GetStringAsync(" http://pcso-linfred-backend.azurewebsites.net/api/Offices/Officer/" + newOfficeID);
+        jasonData = await hc.GetStringAsync("http://pcso-linfred-backend.azurewebsites.net/api/Offices/Officer/" + newOfficeID);
+                                             //http://pcso-linfred-backend.azurewebsites.net/api/Offices/
         //jasonData = await hc.GetStringAsync("https://localhost:7019/officers");
 
         // serialized data

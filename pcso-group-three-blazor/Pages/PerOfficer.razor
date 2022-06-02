@@ -53,9 +53,13 @@ else {
         hc = new HttpClient();
 
         // get all the records
-        jasonData = await hc.GetStringAsync("https://pcso-group3-backend.azurewebsites.net/officers/" + Convert.ToInt32(PersonID));
+        // FROM STREAM
+        //jasonData = await hc.GetStringAsync("https://pcso-group3-backend.azurewebsites.net/officers/" + Convert.ToInt32(PersonID));
 
+        // FROM DATABASE
+        jasonData = await hc.GetStringAsync("http://pcso-linfred-backend.azurewebsites.net/api/Offices/" + Convert.ToInt32(PersonID));
 
+                
         // serialized data        
         _officer = JsonSerializer.Deserialize<Officer>(jasonData);
     }
