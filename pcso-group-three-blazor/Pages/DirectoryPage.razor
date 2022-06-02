@@ -1,11 +1,14 @@
 ﻿@page "/directorypage"
 @inject NavigationManager UriHelper;
 
-<h3>DirectoryPage</h3>
 
-<div>
 
-    <center>
+<div class="card" sstyle="width:50">
+    <div class="card-header">
+        <img src="https://www.pcso.gov.ph/pcsofiles/images/pcsoicon128x128.png" />
+        Mobile PCSO Organizations Guide
+    </div>
+    <div class="card-body">   
         <button class="btn btn-outline-primary" @onclick="@(e=>DisplayBoardOfDirectors("1"))">Office of the Directors</button>
         <br />
         <button class="btn btn-outline-primary" @onclick="@(e=>DisplayBoardOfDirectors("2"))">Office of the Chairperson</button>
@@ -23,8 +26,8 @@
         <button class="btn btn-outline-primary" @onclick="@(e=>DisplayBoardOfDirectors("8"))">Gaming, Product Development and Marketing Sector</button>
         <br />
         <button class="btn btn-outline-primary" @onclick="@(e=>DisplayBoardOfDirectors("9"))">Management Services Sector</button>
-
-    </center>
+    </div>
+ 
 </div>
 
 
