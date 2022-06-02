@@ -80,8 +80,14 @@ else
     {
         hc = new HttpClient();
 
-        // get all the records
-        jasonData = await hc.GetStringAsync("https://pcso-group3-backend.azurewebsites.net/officers");
+        // get all the records from stream
+        // jasonData = await hc.GetStringAsync("https://pcso-group3-backend.azurewebsites.net/officers");
+
+
+        // FROM DATABASE
+       int newOfficeID = Convert.ToInt32(OfficeID);
+
+        jasonData = await hc.GetStringAsync(" http://pcso-linfred-backend.azurewebsites.net/api/Offices/Officer/" + newOfficeID);
         //jasonData = await hc.GetStringAsync("https://localhost:7019/officers");
 
         // serialized data
@@ -89,9 +95,9 @@ else
 
         _officerList = JsonSerializer.Deserialize<List<Officer>>(jasonData);
 
-        int newOfficeID = Convert.ToInt32(OfficeID);
 
-        _officerList = _officerList.Where(s => s.officeId == newOfficeID).ToList();
+
+        //_officerList = _officerList.Where(s => s.officeId == newOfficeID).ToList();
 
         // instantiate the object
         _officer = new Officer();

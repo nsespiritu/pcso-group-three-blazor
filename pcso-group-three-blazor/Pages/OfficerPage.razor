@@ -51,7 +51,7 @@ else
 
 
     <br />
-    @*<input @bind="_officer.id" placeholder="Name" readonly/>*@
+    <input @bind="_officer.id" placeholder="ID"/>
     <input @bind="_officer.name" placeholder="Name"/>
     <input @bind="_officer.position" placeholder="Position"/>
     <input @bind="_officer.department" placeholder="Department"/>
@@ -104,8 +104,13 @@ else
 
 
         // update the record
-        await hc.PutAsJsonAsync("https://pcso-group3-backend.azurewebsites.net/officers/" + _officer.id, _officer);
+        // FROM STREAM
+        //await hc.PutAsJsonAsync("https://pcso-group3-backend.azurewebsites.net/officers/" + _officer.id, _officer);
 
+
+        // update the record
+        // FROM DATABASE
+        await hc.PutAsJsonAsync("http://pcso-linfred-backend.azurewebsites.net/api/Offices/" + _officer.id, _officer);
 
         // refresh the table
         await GetListAsync();
@@ -116,7 +121,14 @@ else
         hc = new HttpClient();
 
         // delete the item from the stream
-        await hc.DeleteAsync("https://pcso-group3-backend.azurewebsites.net/officers/" + ID);
+        //await hc.DeleteAsync("https://pcso-group3-backend.azurewebsites.net/officers/" + ID);
+
+        // delete from DATABASE
+        //await hc.DeleteAsync(" http://pcso-linfred-backend.azurewebsites.net/api/Offices/" + ID);
+
+        // from DATABASE
+        await hc.DeleteAsync("        http://pcso-linfred-backend.azurewebsites.net/api/Offices/" + ID);
+
 
         // get the updated list
         await GetListAsync();
@@ -137,12 +149,15 @@ else
         hc = new HttpClient();
 
         // get all the records
-        jasonData = await hc.GetStringAsync("https://pcso-group3-backend.azurewebsites.net/officers");
-        //jasonData = await hc.GetStringAsync("https://localhost:7019/officers");
+        // FROM STREAM
+        // jasonData = await hc.GetStringAsync("https://pcso-group3-backend.azurewebsites.net/officers");
+
+        
+        // FROM DATABASE
+        jasonData = await hc.GetStringAsync("http://pcso-linfred-backend.azurewebsites.net/api/Offices");
+
 
         // serialized data
-        //_officerList = new List<Officer>();
-
         _officerList = JsonSerializer.Deserialize<List<Officer>>(jasonData);
 
         // instantiate the object
@@ -155,8 +170,12 @@ else
         hc = new HttpClient();
 
         // get all the records
-        jasonData = await hc.GetStringAsync("https://pcso-group3-backend.azurewebsites.net/officers/" + ID);
+        // FROM STREAM
+        //jasonData = await hc.GetStringAsync("https://pcso-group3-backend.azurewebsites.net/officers/" + ID);
 
+        // FROM DATABASE
+        jasonData = await hc.GetStringAsync(" http://pcso-linfred-backend.azurewebsites.net/api/Offices/" + ID);
+       
 
         // serialized data        
         _officer = JsonSerializer.Deserialize<Officer>(jasonData);
@@ -169,7 +188,9 @@ else
     {
         //count++;
 
-        hc = new HttpClient();
+        try
+        {
+                    hc = new HttpClient();
 
         //Officer officerPost = new Officer
         //    {
@@ -181,18 +202,38 @@ else
         //       officeId = _officer.officeId
         //    };
 
-        //string myContent = JsonSerializer.Serialize(officerPost);
-        //byte[] buffer = System.Text.Encoding.UTF8.GetBytes(myContent);
-        //ByteArrayContent byteContent = new ByteArrayContent(buffer);
-        //byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+        string myContent = JsonSerializer.Serialize(officer);
+        byte[] buffer = System.Text.Encoding.UTF8.GetBytes(myContent);
+        ByteArrayContent byteContent = new ByteArrayContent(buffer);
+        byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
         //await hc.PostAsync("https://pcso-group3-backend.azurewebsites.net/officers", byteContent);
 
         // save the record
-        await hc.PostAsJsonAsync("https://pcso-group3-backend.azurewebsites.net/officers", officer);
+        // FROM STREAM
+        //await hc.PostAsJsonAsync("https://pcso-group3-backend.azurewebsites.net/officers", officer);
+
+
+        // save the record
+        // FROM DATABASE
+        //await hc.PostAsJsonAsync("http://pcso-linfred-backend.azurewebsites.net/api/Offices", byteContent);
+         await hc.PostAsync("http://pcso-linfred-backend.azurewebsites.net/api/Offices", byteContent);
+         //await hc.PostAsync("https://localhost:7257/api/Offices", byteContent);
+         //await hc.PostAsJsonAsync("https://localhost:7257/api/Offices", officer);
+
+        //await hc.PostAsync("https://pcso-group3-backend.azurewebsites.net/officers", byteContent);
+
 
         // refresh the table
         await GetListAsync();
         StateHasChanged();
+        }
+        finally
+        {
+                
+        }
+
+
                         
     }
 
