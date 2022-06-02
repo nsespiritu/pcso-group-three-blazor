@@ -60,9 +60,8 @@ else
     <input @bind="_officer.officeId" placeholder="Description"/>
 
     <br />
-     <button class="btn btn-primary" @onclick="AddOfficer">Add Officer</button>
+     <button class="btn btn-primary" @onclick="@(e=>AddOfficer(@_officer))">Add Officer</button>
      <button class="btn btn-primary" @onclick="@(e=>UpdateItem(@_officer))">Update</button>
-
 
 }
 
@@ -99,14 +98,16 @@ else
         //string myContent = JsonSerializer.Serialize(_officer);
         //byte[] buffer = System.Text.Encoding.UTF8.GetBytes(myContent);
         //ByteArrayContent byteContent = new ByteArrayContent(buffer);
-
         //byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
         ////string urlName = "https://pcso-group3-backend.azurewebsites.net/officers/"+ ID;
-
         // await hc.PutAsync("https://pcso-group3-backend.azurewebsites.net/officers/{ID}", byteContent);
 
+
+        // update the record
         await hc.PutAsJsonAsync("https://pcso-group3-backend.azurewebsites.net/officers/" + _officer.id, _officer);
 
+
+        // refresh the table
         await GetListAsync();
     }
 
@@ -164,30 +165,32 @@ else
 
 
 
-     private async void AddOfficer()
+     private async void AddOfficer(Officer officer)
     {
         //count++;
 
         hc = new HttpClient();
 
-        Officer officerPost = new Officer
-            {
-               name = _officer.name,
-               position = _officer.position,
-               department = _officer.department,
-               imageURL = _officer.imageURL,
-               officeId = _officer.officeId
-            };
+        //Officer officerPost = new Officer
+        //    {
+        //       name = _officer.name,
+        //       position = _officer.position,
+        //       department = _officer.department,
+        //       imageURL = _officer.imageURL,
+        //       description = _officer.description,
+        //       officeId = _officer.officeId
+        //    };
 
-        string myContent = JsonSerializer.Serialize(officerPost);
-        byte[] buffer = System.Text.Encoding.UTF8.GetBytes(myContent);
-        ByteArrayContent byteContent = new ByteArrayContent(buffer);
+        //string myContent = JsonSerializer.Serialize(officerPost);
+        //byte[] buffer = System.Text.Encoding.UTF8.GetBytes(myContent);
+        //ByteArrayContent byteContent = new ByteArrayContent(buffer);
+        //byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+        //await hc.PostAsync("https://pcso-group3-backend.azurewebsites.net/officers", byteContent);
 
-        byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+        // save the record
+        await hc.PostAsJsonAsync("https://pcso-group3-backend.azurewebsites.net/officers", officer);
 
-        await hc.PostAsync("https://pcso-group3-backend.azurewebsites.net/officers", byteContent);
-
-       
+        // refresh the table
         await GetListAsync();
         StateHasChanged();
                         
